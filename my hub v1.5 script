@@ -3,7 +3,7 @@ Library.Theme = "Dark"
 local Flags = Library.Flags
 
 local Window = Library:Window({
-   Text = "Rolis Hub v1.2"
+   Text = "Rolis Hub v1.5"
 })
 
 local Tab = Window:Tab({
@@ -46,9 +46,17 @@ Section:Button({
 Section2:Button({
    Text = "Doors",
    Callback = function()
-       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/Rolis38372/my-hub/main/me%20hub%20script%20(doors)?token=GHSAT0AAAAAACTJ667MBQ46F4D6QDG3C6PWZTCKVIA"))())
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/Rolis38372/Rolis-hub/main/my%20Rolis%20hub%20script%20(doors)"))())
    end
 })
+
+Section2:Button({
+   Text = "NDS(Natural Disaster Survival)",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/Rolis38372/Rolis-hub/main/me%20hub%20script%20(NDS)"))())
+   end
+})
+
 
 Section3:Button({
    Text = "REDzHUB",
