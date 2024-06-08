@@ -1,0 +1,50 @@
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Rain-Design/Unnamed/main/Library.lua'))()
+Library.Theme = "Dark"
+local Flags = Library.Flags
+
+local Window = Library:Window({
+   Text = "Rolis Hub (NDS)"
+})
+
+local Tab = Window:Tab({
+   Text = "Scripts"
+})
+
+local Section = Tab:Section({
+   Text = "Natural Disaster Survival"
+})
+
+Section:Button({
+   Text = "PlayerHub",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/JustAP1ayer/PlayerHubOther/main/PlayerHubLoader.lua"))())
+   end
+})
+
+Section:Button({
+   Text = "Liver zMods",
+   Callback = function()
+       warn(loadstring(game:HttpGet('https://raw.githubusercontent.com/LiverMods/Rawnder-NTDR/main/NaturalDisaster'))())
+   end
+})
+
+Section:Button({
+   Text = "Zeerox Hub",
+   Callback = function()
+       warn(loadstring(game:HttpGet'https://raw.githubusercontent.com/RunDTM/ZeeroxHub/main/Loader.lua')())
+   end
+})
+
+Section:Button({
+   Text = "NDS GUI",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringUjHI6RQpz2o8", true))())
+   end
+})
+
+Section:Button({
+   Text = "GHUB",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/garfield hub", true))())
+   end
+})
