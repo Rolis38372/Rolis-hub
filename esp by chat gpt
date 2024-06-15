@@ -1,0 +1,33 @@
+local highlightEnabled = false
+local highlights = {}
+
+-- Function to toggle highlight effect for a specific player
+local function toggleHighlightPlayer(player)
+    if highlightEnabled then
+        -- Check if highlight is already applied
+        if not highlights[player] then
+            local highlight = Instance.new("Highlight", player.Character)
+            highlight.FillColor = Color3.fromRGB(0, 0, 0)  -- Yellow
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 0)  -- Black
+            highlights[player] = highlight
+        end
+    else
+        -- Remove highlight if it exists
+        if highlights[player] then
+            highlights[player]:Destroy()
+            highlights[player] = nil
+        end
+    end
+end
+
+-- Function to toggle highlight effect for all players
+local function toggleHighlightPlayers()
+    highlightEnabled = not highlightEnabled
+
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        toggleHighlightPlayer(player)
+    end
+end
+
+-- Call the function to toggle highlight effect
+toggleHighlightPlayers()
