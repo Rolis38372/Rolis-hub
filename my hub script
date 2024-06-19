@@ -43,6 +43,13 @@ Section:Button({
    end
 })
 
+Section:Button({
+   Text = "highlight players",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/Rolis38372/Rolis-hub/main/highlight%20script"))())
+   end
+})
+
 Section2:Button({
    Text = "Doors",
    Callback = function()
