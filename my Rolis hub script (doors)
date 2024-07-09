@@ -27,3 +27,10 @@ Section:Button({
        warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing-obf/main/Doors%20Blackking%20And%20BobHub"))())
    end
 })
+
+Section:Button({
+   Text = "Vynixius hub",
+   Callback = function()
+       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Vynixius/main/Loader.lua"))())
+   end
+})
