@@ -15,13 +15,6 @@ local Section = Tab:Section({
 })
 
 Section:Button({
-   Text = " Doors FFJ Hub",
-   Callback = function()
-       warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/Loader.lua"))())
-   end
-})
-
-Section:Button({
    Text = " BlackKing X BobHub",
    Callback = function()
        warn(loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing-obf/main/Doors%20Blackking%20And%20BobHub"))())
