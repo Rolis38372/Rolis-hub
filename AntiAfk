@@ -1,0 +1,239 @@
+local genv = getgenv()
+
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+genv.AntiAfkExecuted = true
+
+local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
+
+-- Main GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AntiAFKGui"
+screenGui.Parent = game.CoreGui
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.ResetOnSpawn = false
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Parent = screenGui
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 20)
+mainFrame.BorderSizePixel = 0
+mainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
+mainFrame.Size = UDim2.new(0, 240, 0, 90)
+mainFrame.Active = true
+mainFrame.Draggable = true
+
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 8)
+
+local stroke = Instance.new("UIStroke", mainFrame)
+stroke.Color = Color3.fromRGB(55, 55, 60)
+stroke.Thickness = 1
+
+-- Status dot
+local statusDot = Instance.new("Frame")
+statusDot.Parent = mainFrame
+statusDot.BackgroundColor3 = Color3.fromRGB(80, 220, 120)
+statusDot.BorderSizePixel = 0
+statusDot.Position = UDim2.new(0, 12, 0, 14)
+statusDot.Size = UDim2.new(0, 6, 0, 6)
+
+local dotCorner = Instance.new("UICorner", statusDot)
+dotCorner.CornerRadius = UDim.new(1, 0)
+
+-- Title label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Parent = mainFrame
+titleLabel.BackgroundTransparency = 1
+titleLabel.BorderSizePixel = 0
+titleLabel.Position = UDim2.new(0, 24, 0, 8)
+titleLabel.Size = UDim2.new(0, 200, 0, 18)
+titleLabel.Font = Enum.Font.Gotham
+titleLabel.Text = "Anti-AFK \u{b7} by Rolis"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 11
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.TextYAlignment = Enum.TextYAlignment.Center
+
+-- Close button
+local closeBtn = Instance.new("TextButton")
+closeBtn.Parent = mainFrame
+closeBtn.BackgroundTransparency = 1
+closeBtn.BorderSizePixel = 0
+closeBtn.Position = UDim2.new(1, -28, 0, 8)
+closeBtn.Size = UDim2.new(0, 20, 0, 20)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.Text = "x"
+closeBtn.TextColor3 = Color3.fromRGB(150, 150, 160)
+closeBtn.TextSize = 18
+
+closeBtn.MouseEnter:Connect(function()
+    closeBtn.TextColor3 = Color3.fromRGB(220, 65, 65)
+end)
+
+closeBtn.MouseLeave:Connect(function()
+    closeBtn.TextColor3 = Color3.fromRGB(150, 150, 160)
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    genv.AntiAfkExecuted = false
+    genv.timerRunning = false
+    task.wait(0.05)
+    screenGui:Destroy()
+end)
+
+-- Separator line
+local separator1 = Instance.new("Frame")
+separator1.Parent = mainFrame
+separator1.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+separator1.BorderSizePixel = 0
+separator1.Position = UDim2.new(0, 12, 0, 30)
+separator1.Size = UDim2.new(1, -24, 0, 1)
+
+-- Column headers
+local pingHeader = Instance.new("TextLabel")
+pingHeader.Parent = mainFrame
+pingHeader.BackgroundTransparency = 1
+pingHeader.BorderSizePixel = 0
+pingHeader.Position = UDim2.new(0, 12, 0, 38)
+pingHeader.Size = UDim2.new(0, 72, 0, 14)
+pingHeader.Font = Enum.Font.Gotham
+pingHeader.Text = "PING"
+pingHeader.TextColor3 = Color3.fromRGB(160, 160, 175)
+pingHeader.TextSize = 9
+pingHeader.TextXAlignment = Enum.TextXAlignment.Left
+pingHeader.TextYAlignment = Enum.TextYAlignment.Center
+
+local fpsHeader = Instance.new("TextLabel")
+fpsHeader.Parent = mainFrame
+fpsHeader.BackgroundTransparency = 1
+fpsHeader.BorderSizePixel = 0
+fpsHeader.Position = UDim2.new(0, 92, 0, 38)
+fpsHeader.Size = UDim2.new(0, 72, 0, 14)
+fpsHeader.Font = Enum.Font.Gotham
+fpsHeader.Text = "FPS"
+fpsHeader.TextColor3 = Color3.fromRGB(160, 160, 175)
+fpsHeader.TextSize = 9
+fpsHeader.TextXAlignment = Enum.TextXAlignment.Left
+fpsHeader.TextYAlignment = Enum.TextYAlignment.Center
+
+local timeHeader = Instance.new("TextLabel")
+timeHeader.Parent = mainFrame
+timeHeader.BackgroundTransparency = 1
+timeHeader.BorderSizePixel = 0
+timeHeader.Position = UDim2.new(0, 162, 0, 38)
+timeHeader.Size = UDim2.new(0, 72, 0, 14)
+timeHeader.Font = Enum.Font.Gotham
+timeHeader.Text = "TIME"
+timeHeader.TextColor3 = Color3.fromRGB(160, 160, 175)
+timeHeader.TextSize = 9
+timeHeader.TextXAlignment = Enum.TextXAlignment.Left
+timeHeader.TextYAlignment = Enum.TextYAlignment.Center
+
+-- Column values
+local pingValue = Instance.new("TextLabel")
+pingValue.Parent = mainFrame
+pingValue.BackgroundTransparency = 1
+pingValue.BorderSizePixel = 0
+pingValue.Position = UDim2.new(0, 12, 0, 52)
+pingValue.Size = UDim2.new(0, 72, 0, 28)
+pingValue.Font = Enum.Font.GothamBold
+pingValue.Text = "--"
+pingValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+pingValue.TextSize = 14
+pingValue.TextXAlignment = Enum.TextXAlignment.Left
+pingValue.TextYAlignment = Enum.TextYAlignment.Center
+
+local fpsValue = Instance.new("TextLabel")
+fpsValue.Parent = mainFrame
+fpsValue.BackgroundTransparency = 1
+fpsValue.BorderSizePixel = 0
+fpsValue.Position = UDim2.new(0, 92, 0, 52)
+fpsValue.Size = UDim2.new(0, 72, 0, 28)
+fpsValue.Font = Enum.Font.GothamBold
+fpsValue.Text = "--"
+fpsValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsValue.TextSize = 14
+fpsValue.TextXAlignment = Enum.TextXAlignment.Left
+fpsValue.TextYAlignment = Enum.TextYAlignment.Center
+
+local timerValue = Instance.new("TextLabel")
+timerValue.Parent = mainFrame
+timerValue.BackgroundTransparency = 1
+timerValue.BorderSizePixel = 0
+timerValue.Position = UDim2.new(0, 162, 0, 52)
+timerValue.Size = UDim2.new(0, 72, 0, 28)
+timerValue.Font = Enum.Font.GothamBold
+timerValue.Text = "0:0:0"
+timerValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+timerValue.TextSize = 12
+timerValue.TextXAlignment = Enum.TextXAlignment.Left
+timerValue.TextYAlignment = Enum.TextYAlignment.Center
+
+-- Pulse animation for status dot
+task.spawn(function()
+    while screenGui and screenGui.Parent do
+        local tweenDown = TweenService:Create(statusDot, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            BackgroundColor3 = Color3.fromRGB(40, 160, 80),
+        })
+        tweenDown:Play()
+        task.wait(0.9)
+
+        local tweenUp = TweenService:Create(statusDot, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            BackgroundColor3 = Color3.fromRGB(80, 220, 120),
+        })
+        tweenUp:Play()
+        task.wait(0.9)
+    end
+end)
+
+-- Anti-AFK: simulate button click when idle
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:Button2(Vector2.new())
+end)
+
+-- Real FPS counter
+task.spawn(function()
+    local lastTick = tick()
+    local frameCount = 0
+    while screenGui and screenGui.Parent do
+        frameCount = frameCount + 1
+        local now = tick()
+        if now - lastTick >= 1 then
+            fpsValue.Text = tostring(frameCount)
+            frameCount = 0
+            lastTick = now
+        end
+        RunService.RenderStepped:Wait()
+    end
+end)
+
+-- Real Ping
+task.spawn(function()
+    while screenGui and screenGui.Parent do
+        local pingMs = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+        pingValue.Text = tostring(pingMs)
+        task.wait(1)
+    end
+end)
+
+-- Timer
+genv.timerRunning = true
+
+task.spawn(function()
+    local elapsed = 0
+    while genv.timerRunning do
+        task.wait(1)
+        elapsed = elapsed + 1
+        local hours = math.floor(elapsed / 3600)
+        local minutes = math.floor((elapsed % 3600) / 60)
+        local seconds = elapsed % 60
+        timerValue.Text = string.format("%d:%d:%d", hours, minutes, seconds)
+    end
+end)
